@@ -29,7 +29,7 @@ public interface Huffman {
  *          has occureed 12345. This file does not need to be sorted. 
  *          If this file already exists, overwrite.   
  *                     */
-   public void encode(String inputFile, String outputFile, String freqFile) throws IOException;
+   public void encode(String inputFile, String outputFile, String freqFile);
    
 /**
  *     Decodes the input file (which is the output of encoding()) 
@@ -43,5 +43,5 @@ public interface Huffman {
  *     @param freqFile  freqFile produced after encoding. 
  *     Do not modify this file. 
  *                     */
-   public void decode(String inputFile, String outputFile, String freqFile) throws IOException;
+   public void decode(String inputFile, String outputFile, String freqFile);
 }

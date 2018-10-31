@@ -32,7 +32,7 @@ public class HuffmanSubmit implements Huffman {
     HashMap<Character, Integer> characterMap;
     HashMap<Character, String> characterEncryptedMap;
 
-    public void encode(String inputFile, String outputFile, String freqFile) throws IOException {
+    public void encode(String inputFile, String outputFile, String freqFile) {
         //read data and map character with its frequency
         BinaryIn dataIn = new BinaryIn(inputFile);
         characterMap = new HashMap<>();
@@ -46,7 +46,12 @@ public class HuffmanSubmit implements Huffman {
         }
 
         //print frequency file
-        FileOutputStream file = new FileOutputStream(freqFile);
+        FileOutputStream file = null;
+        try {
+            file = new FileOutputStream(freqFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         for (Character c : characterMap.keySet()) {
             //freqOut.write();
             String output = Integer.toBinaryString(c);
@@ -54,9 +59,17 @@ public class HuffmanSubmit implements Huffman {
             while (output.length() < 8)
                 output = "0" + output;
             output = output + ":" + characterMap.get(c) + "\n";
-            file.write(output.getBytes());
+            try {
+                file.write(output.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        file.close();
+        try {
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //build huffman tree and encrypt char
         Node root = buildHuffmanTree();
@@ -119,13 +132,23 @@ public class HuffmanSubmit implements Huffman {
     }
 
 
-    public void decode(String inputFile, String outputFile, String freqFile) throws IOException {
+    public void decode(String inputFile, String outputFile, String freqFile) {
         //read data from frequency file and map character with its frequency
-        FileInputStream file = new FileInputStream(freqFile);
+        FileInputStream file = null;
+        try {
+            file = new FileInputStream(freqFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(file));
         characterMap = new HashMap<>();
         do {
-            String input = bufferedReader.readLine();
+            String input = null;
+            try {
+                input = bufferedReader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             if (input == null) break;
             char key = (char) Integer.parseInt(input.split(":")[0], 2);
             int value = Integer.parseInt(input.split(":")[1]);
@@ -154,7 +177,7 @@ public class HuffmanSubmit implements Huffman {
     }
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Huffman huffman = new HuffmanSubmit();
 //        huffman.encode("alice30.txt", "ur.enc", "freq.txt");
 //        huffman.decode("ur.enc", "test.txt", "freq.txt");
